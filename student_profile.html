@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% block title %}My Profile — CareerPath AI{% endblock %}
+{% block body %}
+<nav class="navbar navbar-dark">
+  <div class="container-fluid px-4">
+    <a class="navbar-brand" href="/dashboard"><i class="bi bi-compass me-2"></i>CareerPath AI</a>
+    <div class="d-flex gap-2">
+      <a href="/dashboard" class="btn btn-outline-light btn-sm">Dashboard</a>
+      <a href="/logout" class="btn btn-outline-light btn-sm">Logout</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-4" style="max-width:700px;">
+  <div class="card">
+    <div class="card-header"><i class="bi bi-person-badge me-2"></i>Academic Profile
+      <small class="ms-2 opacity-75">— Fill in your details to receive career recommendations</small>
+    </div>
+    <div class="card-body p-4">
+      <form method="POST">
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Faculty</label>
+            <select id="facultySelect" class="form-select" required>
+              <option value="">-- Select Faculty --</option>
+              {% for fac in faculties.keys() %}
+                <option value="{{ fac }}">{{ fac }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Department</label>
+            <select name="department" id="departmentSelect" class="form-select" required>
+              <option value="">-- Select Faculty First --</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Current Level</label>
+            <select name="level" class="form-select" required>
+              <option value="">-- Select --</option>
+              {% for lvl in ['100 Level','200 Level','300 Level','400 Level','500 Level'] %}
+                <option value="{{ lvl }}" {{ 'selected' if profile and profile.level==lvl }}>{{ lvl }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">CGPA (5.0 Scale)</label>
+            <input type="number" name="cgpa" class="form-control" step="0.01" min="0" max="5.0"
+              placeholder="e.g. 3.75" value="{{ profile.cgpa if profile else '' }}" required>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Skill Level</label>
+          <select name="skill_level" class="form-select" required>
+            <option value="">-- Select --</option>
+            {% for skill in ['Beginner','Intermediate','Advanced'] %}
+              <option value="{{ skill }}" {{ 'selected' if profile and profile.skill_level==skill }}>{{ skill }}</option>
+            {% endfor %}
+          </select>
+          <div class="form-text">Rate your practical/technical skill level in your field of study.</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Areas of Interest <small class="text-muted">(select all that apply)</small></label>
+          <div class="row row-cols-2 g-2">
+            {% for interest in interests %}
+              <div class="col">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" name="interests"
+                    value="{{ interest }}" id="int_{{ loop.index }}"
+                    {{ 'checked' if profile and interest in profile.interests }}>
+                  <label class="form-check-label small" for="int_{{ loop.index }}">{{ interest }}</label>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label fw-semibold">Preferred Career Field</label>
+          <select name="preferred_field" class="form-select" required>
+            <option value="">-- Select --</option>
+            {% for field in career_fields %}
+              <option value="{{ field }}" {{ 'selected' if profile and profile.preferred_field==field }}>{{ field }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 py-2 fw-bold"><i class="bi bi-cpu me-2"></i>Generate My Career Recommendations</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  const facultiesData = {{ faculties|tojson }};
+  const currentDept = "{{ profile.department if profile else '' }}";
+  const currentFac = "{{ profile.faculty if profile else '' }}";
+
+  const facultySelect = document.getElementById('facultySelect');
+  const deptSelect = document.getElementById('departmentSelect');
+
+  function populateDepartments(faculty, selected) {
+    deptSelect.innerHTML = '<option value="">-- Select Department --</option>';
+    if (facultiesData[faculty]) {
+      facultiesData[faculty].forEach(dept => {
+        const opt = document.createElement('option');
+        opt.value = dept;
+        opt.textContent = dept;
+        if (dept === selected) opt.selected = true;
+        deptSelect.appendChild(opt);
+      });
+    }
+  }
+
+  facultySelect.addEventListener('change', () => populateDepartments(facultySelect.value, ''));
+
+  // Pre-fill on page load if editing
+  if (currentFac) {
+    facultySelect.value = currentFac;
+    populateDepartments(currentFac, currentDept);
+  }
+</script>
+{% endblock %}

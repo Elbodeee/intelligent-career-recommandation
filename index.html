@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}CareerPath AI — ADUSTECH{% endblock %}
+{% block body %}
+<nav class="navbar navbar-dark navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand text-white" href="/"><i class="bi bi-compass me-2"></i>CareerPath AI</a>
+    <div class="ms-auto d-flex gap-2">
+      <a href="/login" class="btn btn-outline-light btn-sm">Login</a>
+      <a href="/register" class="btn btn-light btn-sm text-primary fw-bold">Register</a>
+    </div>
+  </div>
+</nav>
+
+<div style="background:linear-gradient(135deg,#1a3c6e,#2563eb);color:#fff;padding:80px 0 60px;">
+  <div class="container text-center">
+    <div class="mb-3" style="font-size:3.5rem">🎓</div>
+    <h1 class="display-5 fw-bold mb-3">Intelligent Career Path<br>Recommendation System</h1>
+    <p class="lead mb-4" style="opacity:.85;max-width:600px;margin:0 auto 24px;">
+      Discover the career that matches your academic profile, skills, and interests.
+      Serving all {{ faculty_count }} faculties and {{ dept_count }} departments at ADUSTECH, Wudil.
+    </p>
+    <div class="d-flex gap-3 justify-content-center">
+      <a href="/register" class="btn btn-light btn-lg fw-bold px-4" style="color:#1a3c6e"><i class="bi bi-person-plus me-2"></i>Get Started</a>
+      <a href="/login" class="btn btn-outline-light btn-lg px-4"><i class="bi bi-box-arrow-in-right me-2"></i>Login</a>
+    </div>
+  </div>
+</div>
+
+<div class="container py-5">
+  <div class="row g-4 justify-content-center text-center mb-4">
+    <div class="col-md-3 col-6">
+      <h2 class="fw-bold" style="color:#1a3c6e">{{ faculty_count }}</h2>
+      <p class="text-muted small">Faculties Covered</p>
+    </div>
+    <div class="col-md-3 col-6">
+      <h2 class="fw-bold" style="color:#1a3c6e">{{ dept_count }}</h2>
+      <p class="text-muted small">Departments Covered</p>
+    </div>
+  </div>
+  <div class="row g-4 justify-content-center">
+    <div class="col-md-4">
+      <div class="card text-center p-4 h-100">
+        <div style="font-size:2.5rem" class="mb-3">🤖</div>
+        <h5 class="fw-bold">Rule-Based Intelligence</h5>
+        <p class="text-muted small">Expert-defined rules match your profile with the most suitable career paths for your department.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-center p-4 h-100">
+        <div style="font-size:2.5rem" class="mb-3">📊</div>
+        <h5 class="fw-bold">Personalised Results</h5>
+        <p class="text-muted small">Recommendations based on your faculty, department, CGPA, skills, and interests.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-center p-4 h-100">
+        <div style="font-size:2.5rem" class="mb-3">💡</div>
+        <h5 class="fw-bold">Clear Explanations</h5>
+        <p class="text-muted small">Every recommended career comes with a clear reason so you understand why it suits you.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<footer class="text-center py-4 text-muted small border-top">&copy; 2026 CareerPath AI — ADUSTECH, Wudil, Kano State, Nigeria</footer>
+{% endblock %}

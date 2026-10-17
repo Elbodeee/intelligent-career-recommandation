@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Register — CareerPath AI{% endblock %}
+{% block body %}
+<div style="min-height:100vh;background:linear-gradient(135deg,#1a3c6e,#2563eb);display:flex;align-items:center;justify-content:center;padding:20px;">
+  <div class="card p-4" style="width:100%;max-width:460px;">
+    <div class="text-center mb-4">
+      <div style="font-size:2.5rem">📝</div>
+      <h4 class="fw-bold mt-2" style="color:#1a3c6e">Create Account</h4>
+      <p class="text-muted small">Register to get your career recommendations</p>
+    </div>
+    <form method="POST">
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Full Name</label>
+        <div class="input-group"><span class="input-group-text"><i class="bi bi-person"></i></span>
+        <input type="text" name="full_name" class="form-control" placeholder="e.g. Umar Lawan Almu" required></div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Registration Number</label>
+        <div class="input-group"><span class="input-group-text"><i class="bi bi-card-text"></i></span>
+        <input type="text" name="reg_number" class="form-control" placeholder="e.g. UG21/COMS/1047" required></div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Email Address</label>
+        <div class="input-group"><span class="input-group-text"><i class="bi bi-envelope"></i></span>
+        <input type="email" name="email" class="form-control" placeholder="your@email.com" required></div>
+      </div>
+      <div class="mb-4">
+        <label class="form-label fw-semibold">Password</label>
+        <div class="input-group"><span class="input-group-text"><i class="bi bi-lock"></i></span>
+        <input type="password" name="password" class="form-control" placeholder="Min. 6 characters" required minlength="6"></div>
+      </div>
+      <button type="submit" class="btn btn-primary w-100 py-2 fw-bold"><i class="bi bi-person-check me-2"></i>Create Account</button>
+    </form>
+    <p class="text-center text-muted small mt-3">Already have an account? <a href="/login" class="fw-semibold">Login here</a></p>
+  </div>
+</div>
+{% endblock %}

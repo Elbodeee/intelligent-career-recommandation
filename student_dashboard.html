@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block title %}Student Dashboard — CareerPath AI{% endblock %}
+{% block body %}
+<nav class="navbar navbar-dark">
+  <div class="container-fluid px-4">
+    <span class="navbar-brand"><i class="bi bi-compass me-2"></i>CareerPath AI</span>
+    <div class="d-flex align-items-center gap-3">
+      <span class="text-white small"><i class="bi bi-person-circle me-1"></i>{{ session.full_name }}</span>
+      <a href="/logout" class="btn btn-outline-light btn-sm">Logout</a>
+    </div>
+  </div>
+</nav>
+<div class="container py-4">
+  <h5 class="fw-bold" style="color:#1a3c6e">Welcome, {{ session.full_name }} 👋</h5>
+  <p class="text-muted small">Complete your academic profile to receive your personalised career recommendations.</p>
+
+  <div class="row g-3 mb-4 mt-2">
+    <div class="col-md-4">
+      <div class="stat-card" style="background:linear-gradient(135deg,#1a3c6e,#2563eb);">
+        <div class="stat-num">{{ history|length }}</div><div class="stat-label">Recommendations Received</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="stat-card" style="background:linear-gradient(135deg,#059669,#10b981);">
+        <div class="stat-num">{{ '✓' if profile else '✗' }}</div><div class="stat-label">Profile {{ 'Completed' if profile else 'Not Yet Filled' }}</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="stat-card" style="background:linear-gradient(135deg,#d97706,#f59e0b);">
+        <div class="stat-num">{{ profile.cgpa if profile else 'N/A' }}</div><div class="stat-label">Current CGPA</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-5">
+      <div class="card h-100">
+        <div class="card-header"><i class="bi bi-person-badge me-2"></i>My Academic Profile</div>
+        <div class="card-body">
+          {% if profile %}
+            <table class="table table-sm table-borderless">
+              <tr><td class="text-muted small">Faculty</td><td class="fw-semibold small">{{ profile.faculty }}</td></tr>
+              <tr><td class="text-muted small">Department</td><td class="fw-semibold small">{{ profile.department }}</td></tr>
+              <tr><td class="text-muted small">Level</td><td class="fw-semibold small">{{ profile.level }}</td></tr>
+              <tr><td class="text-muted small">CGPA</td><td class="fw-semibold small">{{ profile.cgpa }}</td></tr>
+              <tr><td class="text-muted small">Skill Level</td><td class="fw-semibold small">{{ profile.skill_level }}</td></tr>
+              <tr><td class="text-muted small">Preferred Field</td><td class="fw-semibold small">{{ profile.preferred_field }}</td></tr>
+              <tr><td class="text-muted small">Interests</td><td class="fw-semibold small">{{ profile.interests }}</td></tr>
+            </table>
+          {% else %}
+            <div class="text-center py-4">
+              <i class="bi bi-person-x" style="font-size:2.5rem;color:#ccc"></i>
+              <p class="text-muted small mt-2">You have not filled in your academic profile yet.</p>
+            </div>
+          {% endif %}
+          <a href="/profile" class="btn btn-primary w-100 mt-2">
+            <i class="bi bi-{{ 'pencil' if profile else 'plus-circle' }} me-2"></i>
+            {{ 'Update Profile & Get New Recommendations' if profile else 'Fill In My Profile' }}
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-7">
+      <div class="card h-100">
+        <div class="card-header"><i class="bi bi-clock-history me-2"></i>My Recommendation History</div>
+        <div class="card-body">
+          {% if history %}
+            {% for rec in history %}
+              <div class="rec-card">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div class="career-name">{{ rec.career_name }}</div>
+                  <span class="match-badge"><i class="bi bi-check-circle me-1"></i>Matched</span>
+                </div>
+                <p class="reason">{{ rec.reason_text }}</p>
+                <small class="text-muted"><i class="bi bi-calendar3 me-1"></i>{{ rec.recommended_at }}</small>
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="text-center py-5">
+              <i class="bi bi-search" style="font-size:3rem;color:#ccc"></i>
+              <p class="text-muted mt-2">No recommendations yet. Fill in your profile to get started.</p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

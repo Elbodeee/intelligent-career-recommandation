@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Manage Rules — CareerPath AI{% endblock %}
+{% block body %}
+<div class="d-flex">
+  <div class="sidebar d-none d-md-block flex-shrink-0">
+    <div class="text-white px-3 pb-3 fw-bold" style="font-size:1.1rem"><i class="bi bi-compass me-2"></i>CareerPath AI</div>
+    <div class="sidebar-heading">Main</div>
+    <a href="/admin"><i class="bi bi-speedometer2"></i>Dashboard</a>
+    <div class="sidebar-heading">Manage</div>
+    <a href="/admin/students"><i class="bi bi-people"></i>Students</a>
+    <a href="/admin/careers"><i class="bi bi-briefcase"></i>Careers</a>
+    <a href="/admin/rules" class="active"><i class="bi bi-diagram-3"></i>Rules</a>
+    <a href="/admin/history"><i class="bi bi-clock-history"></i>History</a>
+    <div class="sidebar-heading">Account</div>
+    <a href="/logout"><i class="bi bi-box-arrow-left"></i>Logout</a>
+  </div>
+  <div class="flex-grow-1 p-4">
+    <h5 class="fw-bold mb-4" style="color:#1a3c6e"><i class="bi bi-diagram-3 me-2"></i>Manage Recommendation Rules ({{ rules|length }})</h5>
+    <div class="card mb-4">
+      <div class="card-header">Add New Rule</div>
+      <div class="card-body">
+        <form method="POST">
+          <input type="hidden" name="action" value="add">
+          <div class="row g-3">
+            <div class="col-md-3"><label class="form-label fw-semibold small">Condition Field</label>
+              <select name="condition_field" class="form-select form-select-sm" required>
+                <option value="department">Department</option>
+                <option value="faculty">Faculty</option>
+                <option value="cgpa">CGPA</option>
+                <option value="skill_level">Skill Level</option>
+                <option value="interests">Interests</option>
+                <option value="preferred_field">Preferred Field</option>
+              </select></div>
+            <div class="col-md-2"><label class="form-label fw-semibold small">Operator</label>
+              <select name="condition_operator" class="form-select form-select-sm" required>
+                <option value="==">=</option><option value=">=">&gt;=</option><option value="CONTAINS">CONTAINS</option>
+              </select></div>
+            <div class="col-md-3"><label class="form-label fw-semibold small">Value</label>
+              <input type="text" name="condition_value" class="form-control form-control-sm" required></div>
+            <div class="col-md-2"><label class="form-label fw-semibold small">Career</label>
+              <select name="career_id" class="form-select form-select-sm" required>
+                {% for c in careers %}<option value="{{ c.career_id }}">{{ c.career_name }}</option>{% endfor %}
+              </select></div>
+            <div class="col-md-2 d-flex align-items-end"><button type="submit" class="btn btn-primary btn-sm w-100"><i class="bi bi-plus me-1"></i>Add</button></div>
+            <div class="col-12"><label class="form-label fw-semibold small">Reason Text</label>
+              <input type="text" name="reason_text" class="form-control form-control-sm" required></div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead><tr><th>#</th><th>Field</th><th>Op</th><th>Value</th><th>Career</th><th>Reason</th><th>Del</th></tr></thead>
+            <tbody>
+              {% for r in rules %}
+              <tr>
+                <td class="small">{{ r.rule_id }}</td>
+                <td class="small"><span class="badge bg-secondary">{{ r.condition_field }}</span></td>
+                <td class="small">{{ r.condition_operator }}</td>
+                <td class="small fw-semibold">{{ r.condition_value }}</td>
+                <td class="small text-primary">{{ r.career_name }}</td>
+                <td class="small text-muted" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ r.reason_text }}</td>
+                <td><form method="POST" style="display:inline" onsubmit="return confirm('Delete?')">
+                  <input type="hidden" name="action" value="delete"><input type="hidden" name="rule_id" value="{{ r.rule_id }}">
+                  <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button></form></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

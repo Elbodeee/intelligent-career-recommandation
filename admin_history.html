@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Recommendation History — CareerPath AI{% endblock %}
+{% block body %}
+<div class="d-flex">
+  <div class="sidebar d-none d-md-block flex-shrink-0">
+    <div class="text-white px-3 pb-3 fw-bold" style="font-size:1.1rem"><i class="bi bi-compass me-2"></i>CareerPath AI</div>
+    <div class="sidebar-heading">Main</div>
+    <a href="/admin"><i class="bi bi-speedometer2"></i>Dashboard</a>
+    <div class="sidebar-heading">Manage</div>
+    <a href="/admin/students"><i class="bi bi-people"></i>Students</a>
+    <a href="/admin/careers"><i class="bi bi-briefcase"></i>Careers</a>
+    <a href="/admin/rules"><i class="bi bi-diagram-3"></i>Rules</a>
+    <a href="/admin/history" class="active"><i class="bi bi-clock-history"></i>History</a>
+    <div class="sidebar-heading">Account</div>
+    <a href="/logout"><i class="bi bi-box-arrow-left"></i>Logout</a>
+  </div>
+  <div class="flex-grow-1 p-4">
+    <h5 class="fw-bold mb-4" style="color:#1a3c6e"><i class="bi bi-clock-history me-2"></i>Recommendation History ({{ history|length }})</h5>
+    <div class="card">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead><tr><th>#</th><th>Student</th><th>Reg No.</th><th>Department</th><th>Career Recommended</th><th>Date</th></tr></thead>
+            <tbody>
+              {% for h in history %}
+              <tr>
+                <td class="small">{{ loop.index }}</td>
+                <td class="small fw-semibold">{{ h.full_name }}</td>
+                <td class="small">{{ h.reg_number }}</td>
+                <td class="small">{{ h.department or '—' }}</td>
+                <td class="small text-primary fw-semibold">{{ h.career_name }}</td>
+                <td class="small text-muted">{{ h.recommended_at }}</td>
+              </tr>
+              {% else %}
+              <tr><td colspan="6" class="text-center text-muted py-4">No recommendation history yet.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

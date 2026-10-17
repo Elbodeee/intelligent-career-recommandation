@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard — CareerPath AI{% endblock %}
+{% block body %}
+<div class="d-flex">
+  <div class="sidebar d-none d-md-block flex-shrink-0">
+    <div class="text-white px-3 pb-3 fw-bold" style="font-size:1.1rem"><i class="bi bi-compass me-2"></i>CareerPath AI</div>
+    <div class="sidebar-heading">Main</div>
+    <a href="/admin" class="active"><i class="bi bi-speedometer2"></i>Dashboard</a>
+    <div class="sidebar-heading">Manage</div>
+    <a href="/admin/students"><i class="bi bi-people"></i>Students</a>
+    <a href="/admin/careers"><i class="bi bi-briefcase"></i>Careers</a>
+    <a href="/admin/rules"><i class="bi bi-diagram-3"></i>Rules</a>
+    <a href="/admin/history"><i class="bi bi-clock-history"></i>History</a>
+    <div class="sidebar-heading">Account</div>
+    <a href="/logout"><i class="bi bi-box-arrow-left"></i>Logout</a>
+  </div>
+
+  <div class="flex-grow-1 p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div><h5 class="fw-bold mb-0" style="color:#1a3c6e">Admin Dashboard</h5><small class="text-muted">Welcome, {{ session.full_name }}</small></div>
+    </div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-md-3 col-6"><div class="stat-card" style="background:linear-gradient(135deg,#1a3c6e,#2563eb);"><div class="stat-num">{{ student_count }}</div><div class="stat-label">Total Students</div></div></div>
+      <div class="col-md-3 col-6"><div class="stat-card" style="background:linear-gradient(135deg,#059669,#10b981);"><div class="stat-num">{{ career_count }}</div><div class="stat-label">Career Options</div></div></div>
+      <div class="col-md-3 col-6"><div class="stat-card" style="background:linear-gradient(135deg,#d97706,#f59e0b);"><div class="stat-num">{{ rec_count }}</div><div class="stat-label">Recommendations</div></div></div>
+      <div class="col-md-3 col-6"><div class="stat-card" style="background:linear-gradient(135deg,#7c3aed,#a78bfa);"><div class="stat-num">{{ rules_count }}</div><div class="stat-label">Active Rules</div></div></div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-7">
+        <div class="card">
+          <div class="card-header"><i class="bi bi-people me-2"></i>Recent Students</div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead><tr><th>Name</th><th>Faculty</th><th>Department</th><th>CGPA</th></tr></thead>
+                <tbody>
+                  {% for s in recent_students %}
+                  <tr>
+                    <td class="small fw-semibold">{{ s.full_name }}</td>
+                    <td class="small">{{ s.faculty or '—' }}</td>
+                    <td class="small">{{ s.department or '—' }}</td>
+                    <td class="small">{{ s.cgpa or '—' }}</td>
+                  </tr>
+                  {% else %}
+                  <tr><td colspan="4" class="text-center text-muted py-4">No students registered yet.</td></tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt-3">
+          <div class="card-header"><i class="bi bi-bar-chart-steps me-2"></i>Students by Faculty</div>
+          <div class="card-body">
+            {% if faculty_breakdown %}
+              {% for fb in faculty_breakdown %}
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="small">{{ fb.faculty }}</span>
+                  <span class="badge bg-primary rounded-pill">{{ fb.total }}</span>
+                </div>
+              {% endfor %}
+            {% else %}
+              <p class="text-muted text-center py-3 small">No data yet.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-5">
+        <div class="card">
+          <div class="card-header"><i class="bi bi-bar-chart me-2"></i>Most Recommended Careers</div>
+          <div class="card-body">
+            {% if top_careers %}
+              {% for tc in top_careers %}
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="small fw-semibold">{{ tc.career_name }}</span>
+                  <span class="badge bg-primary rounded-pill">{{ tc.total }}</span>
+                </div>
+                <div class="progress mb-3" style="height:6px;"><div class="progress-bar" style="width:{{ [tc.total * 20, 100]|min }}%"></div></div>
+              {% endfor %}
+            {% else %}
+              <p class="text-muted text-center py-3 small">No recommendation data yet.</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="card mt-3">
+          <div class="card-header"><i class="bi bi-lightning me-2"></i>Quick Actions</div>
+          <div class="card-body d-grid gap-2">
+            <a href="/admin/careers" class="btn btn-outline-primary btn-sm"><i class="bi bi-plus-circle me-2"></i>Add New Career</a>
+            <a href="/admin/rules" class="btn btn-outline-primary btn-sm"><i class="bi bi-diagram-3 me-2"></i>Manage Rules</a>
+            <a href="/admin/students" class="btn btn-outline-primary btn-sm"><i class="bi bi-people me-2"></i>View All Students</a>
+            <a href="/admin/history" class="btn btn-outline-primary btn-sm"><i class="bi bi-clock-history me-2"></i>View History</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
